@@ -37,7 +37,7 @@ I advise you to put this in your `.bashrc`
 
 ```
 mkvm() {
-	docker run --rm --user $(id -u):$(id -g) -v $(realpath .):/opt metthal/mkv_master mkv_master "$@"
+	docker run --rm --user $(id -u):$(id -g) -v "$(realpath .):/opt" metthal/mkv_master mkv_master "$@"
 }
 ```
 
