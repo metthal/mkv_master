@@ -17,6 +17,20 @@ The docker image contains:
 ```
 * Custom `mkv_master` Python 3 script
 
+## Installation
+
+If you just want to use `mkv_master` you can pull the existing docker image from Docker Hub.
+
+```
+docker pull metthal/mkv_master
+```
+
+or you can build it yourself
+
+```
+docker build -t mkv_master .
+```
+
 ## Usage
 
 I advise you to put this in your `.bashrc`
