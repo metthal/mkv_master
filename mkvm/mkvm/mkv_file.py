@@ -53,7 +53,8 @@ class MkvFile:
             s['channels'],
             s['bitrate'],
             s['language'],
-            '[x]' if s['audio_stream_id'] == best_audio_stream_id else '[ ]'
+            '[x]' if s['audio_stream_id'] == best_audio_stream_id else '[ ]',
+            s['description']
         ] for s in self.audio_streams]
 
         subtitle_streams = [[
@@ -61,13 +62,14 @@ class MkvFile:
             s['subtitle_stream_id'],
             s['codec'],
             '[x]' if s['default'] else '[ ]',
-            s['language']
+            s['language'],
+            s['description']
         ] for s in self.subtitle_streams]
 
         return '\n\n'.join([
             'Video streams:\n' + tabulate(video_streams, headers=['ID', 'Video ID', 'Codec', 'Default', 'Resolution', 'Bitrate', 'Duration']),
-            'Audio streams:\n' + tabulate(audio_streams, headers=['ID', 'Audio ID', 'Codec', 'Default', 'Channels', 'Bitrate', 'Language', 'Best']),
-            'Subtitle streams:\n' + tabulate(subtitle_streams, headers=['ID', 'Sub ID', 'Codec', 'Default', 'Language']),
+            'Audio streams:\n' + tabulate(audio_streams, headers=['ID', 'Audio ID', 'Codec', 'Default', 'Channels', 'Bitrate', 'Language', 'Best', 'Description']),
+            'Subtitle streams:\n' + tabulate(subtitle_streams, headers=['ID', 'Sub ID', 'Codec', 'Default', 'Language', 'Description']),
         ])
 
     def as_raw(self):
@@ -139,7 +141,8 @@ class MkvFile:
             'channels': stream['channels'],
             'default': True if stream['disposition']['default'] == 1 else False,
             'bitrate': MkvFile._parse_bitrate(stream),
-            'language': MkvFile._parse_tag_value(stream, 'language')
+            'language': MkvFile._parse_tag_value(stream, 'language'),
+            'description': MkvFile._parse_tag_value(stream, 'title')
         }
 
     @staticmethod
@@ -149,7 +152,8 @@ class MkvFile:
             'subtitle_stream_id': subtitle_stream_id,
             'codec': stream['codec_name'],
             'default': True if stream['disposition']['default'] == 1 else False,
-            'language': MkvFile._parse_tag_value(stream, 'language')
+            'language': MkvFile._parse_tag_value(stream, 'language'),
+            'description': MkvFile._parse_tag_value(stream, 'title')
         }
 
     @staticmethod
