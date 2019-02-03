@@ -45,6 +45,18 @@ def strip_subs():
     pipeline.convert_stage.set_strip_subs()
 
 
+@process.command(name='default_audio')
+@click.argument('audio_track_id', nargs=1, type=int)
+def default_audio(audio_track_id):
+    pipeline.convert_stage.set_default_audio(audio_track_id)
+
+
+@process.command(name='default_subtitles')
+@click.argument('subtitles_track_id', nargs=1, type=int)
+def default_subtitles(subtitles_track_id):
+    pipeline.convert_stage.set_default_subtitles(subtitles_track_id)
+
+
 @process.command(name='add_subtitles')
 @click.argument('subtitles_file', nargs=1)
 @click.option('--shift', 'shift', default=None)

@@ -82,6 +82,10 @@ class MkvFile:
         return len(self._streams_of_type('audio'))
 
     @property
+    def number_of_subtitle_streams(self):
+        return len(self._streams_of_type('subtitle'))
+
+    @property
     def best_audio_stream(self):
         return sorted([
             (
