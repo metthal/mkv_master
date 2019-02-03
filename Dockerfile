@@ -5,25 +5,9 @@ RUN apt-get update && \
 	autoconf automake build-essential git libtool \
 	mkvtoolnix nasm pkg-config python3-pip zlib1g-dev
 
-RUN git clone https://github.com/MediaArea/ZenLib.git /build/zenlib
-RUN git clone https://github.com/MediaArea/MediaInfoLib.git /build/mediainfolib
-RUN git clone https://github.com/MediaArea/MediaInfo.git /build/mediainfo
 RUN git clone https://git.ffmpeg.org/ffmpeg.git /build/ffmpeg
 RUN git clone https://github.com/mstorsjo/fdk-aac.git /build/fdk-aac
 RUN git clone https://git.videolan.org/git/ffmpeg/nv-codec-headers.git /build/nv-codec-headers
-
-RUN cd /build/zenlib/Project/GNU/Library && \
-	./autogen.sh && \
-	./configure --enable-shared && \
-	make -j$(nproc) install
-RUN cd /build/mediainfolib/Project/GNU/Library && \
-	./autogen.sh && \
-	./configure --enable-shared && \
-	make -j$(nproc) install
-RUN cd /build/mediainfo/Project/GNU/CLI && \
-	./autogen.sh && \
-	./configure --enable-shared && \
-	make -j$(nproc) install
 
 RUN cd /build/nv-codec-headers && \
 	make install
@@ -54,13 +38,11 @@ RUN  cd /build/ffmpeg && \
 		--enable-version3 --disable-debug --enable-libfdk-aac --enable-nonfree && \
 	make -j$(nproc) install
 
-ADD mkv_master /mkv_master
-RUN chmod +x /mkv_master/mkv_master
-RUN pip3 install -r /mkv_master/requirements.txt
+ADD mkvm /mkvm
+RUN chmod +x /mkvm/run.py
+RUN pip3 install -r /mkvm/requirements.txt
 
-ADD entrypoint.sh /
-RUN chmod +x /entrypoint.sh
-
+ENV PATH="/mkvm:${PATH}"
 ENV LC_ALL=C.UTF-8 LANG=C.UTF-8
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["run.py"]
